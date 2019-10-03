@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Gradesy</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+</head>
+
+<body>
+	<script>
+		function login() {
+    		var id = document.getElementById('username').value;
+			var password = document.getElementById('password').value;
+			var url = "http://student.mccinfo.net/~crbrehm/gradesy/grades.php?id=" + encodeURIComponent(id) + "&pass=" + encodeURIComponent(password);
+			window.location.href = url;
+		}
+	</script>
+    <!--    
+        Carter Brehm
+        index.php
+        INFO2439.PLA
+        Thoendel
+        10/1/13
+    -->
+
+    <div data-role="page" id="home" data-title="Gradesy">
+        <header data-role="header">
+            <h1>Gradesy</h1>
+        </header>
+    	<div data-role="content">
+    		<label for="username">Student ID <b>(do not include @paplv.org)</b>:</label>
+    		<input type="text" name="username" id="username" value="">
+    		<label for="password">Password:</label>
+    		<input type="password" name="password" id="password" value="" autocomplete="off">
+    		<button class="ui-shadow ui-btn ui-corner-all" onClick="login();">Login</button>
+    	</div>
+        <footer style="text-align: center;" data-role="footer" data-position="fixed">Created by: <a href="mailto:crbrehm@mail.mccneb.edu">Carter Brehm</a></footer>
+    </div>
+    <script>
+		var wage = document.getElementById("password");
+		wage.addEventListener("keydown", function (e) {
+    		if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
+        		login();
+    		}
+		});
+	</script>
+</body>
+
+</html>

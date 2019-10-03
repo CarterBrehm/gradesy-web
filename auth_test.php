@@ -4,10 +4,7 @@
 <head>
     <title>Gradesy</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 </head>
 
 <body>
@@ -64,12 +61,18 @@
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, 'http://simsweb.esu3.org/processlogin.cfm?sdist=plv');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, "userid=" . $username . "%40paplv.org&password=" . $password);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, "userid=" . $username . "@paplv.org&password=" . $password);
         curl_setopt($ch, CURLOPT_POST, 1);
         $result = curl_exec($ch);
 
         //grab the link from curl info, then shut down the request
         $curl_array = curl_getinfo($ch);
+        echo $username;
+        echo $password;
+        foreach ($curl_array as $value) {
+        	echo $value;
+        	echo "<br>";
+        }
         $number_array = array_values($curl_array);
         $auth_complete_link = $number_array[25];
         curl_close($ch);
@@ -145,26 +148,11 @@
     $password = $_GET['pass'];
 
     $authResponse = makeAuthRequest($username, $password);
-
+    
     if (strpos($authResponse, "childlist")) {
         $_SESSION['TABLE'] = fetchGrades($authResponse);
     }
 
-    ?>
-
-    <div data-role="page" id="home" data-title="Gradesy">
-        <header data-role="header">
-            <h1>Gradesy</h1>
-        </header>
-        <?php
-            printClassOverview();
-        ?>
-        <footer style="text-align: center;" data-role="footer" data-position="fixed">Created by: <a href="mailto:crbrehm@mail.mccneb.edu">Carter Brehm</a></footer>
-    </div>
-    <?php 
-        foreach ($_SESSION['TABLE'] as $row) {
-            printClass($row);
-        }
     ?>
 </body>
 

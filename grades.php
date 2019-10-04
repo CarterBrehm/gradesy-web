@@ -8,9 +8,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    
 </head>
 
 <body>
+    <link rel="stylesheet" href="vendor/waves/waves.min.css" />
+	<link rel="stylesheet" href="vendor/wow/animate.css" />
+	<link rel="stylesheet" href="css/nativedroid2.css" />
     <!--    
         Carter Brehm
         index.php
@@ -23,16 +27,16 @@
 
     function printClassOverview() {
         if (isset($_SESSION['TABLE'])) {
-            echo "<div data-role=\"content\"><p style=\"text-align: center;\"><b>Tip:</b> You can save this to your home screen as an app by pressing the share button below and hitting \"Add to Home Screen.\"</p>
+            echo "<div data-role=\"content\">
             <ul data-role=\"listview\" data-inset=\"true\">";
             echo "<li data-role=\"list-divider\">Classes</li>";
 
                 $table = $_SESSION['TABLE'];
                 foreach ($table as $row) {
-                    echo "<li><a href=\"#" . str_replace(' ', '', $row[0]) . "\">". $row[0] . "<span class=\"ui-li-count\">" . $row[6] . "</span>" . "</a></li>";
+                    echo "<li><a href=\"#" . str_replace(' ', '', $row[0] . $row[1]) . "\">". $row[0] . "<span class=\"ui-li-count\">" . $row[6] . "</span>" . "</a></li>";
                 }
 
-            echo "</ul>
+            echo "</ul><p style=\"text-align: center;\"><b>Tip:</b> You can save this to your home screen as an app by pressing the share button below and hitting \"Add to Home Screen.\"</p>
         </div>";
         } else {
             echo "<p style=\"text-align: center; margin: 10px;\">Your login info seems to be incorrect. Please go back and try again.</p>";
@@ -40,19 +44,46 @@
     }
 
     function printClass($row) {
-        echo "<div data-role=\"page\" data-title=\"" . $row[0] . "\" id=\"" . str_replace(' ', '', $row[0]) . "\">
+        echo "<div data-role=\"page\" data-title=\"" . $row[0] . "\" id=\"" . str_replace(' ', '', $row[0] . $row[1]) . "\">
         <header data-role=\"header\" data-add-back-btn=\"true\">
             <h1>" . $row[0] .  "</h1>
         </header>
         <div data-role=\"content\">
             <ul data-role=\"listview\" data-inset=\"true\">";
+        echo "<li data-role=\"list-divider\">Class Details</li>";
         unset($row[0]);
-        foreach ($row as $value) {
-            echo "<li>" . $value . "</li>";
+        echo "<li><b>Term: </b>" . $row[1] . "</li>";
+        unset($row[1]);
+        echo "<li><b>Class Hour: </b>" . $row[2] . "</li>";
+        unset($row[2]);
+        echo "<li><b>Class Time: </b>" . $row[3] . "</li>";
+        unset($row[3]);
+        echo "<li><b>Teacher: </b>" . $row[4] . "</li>";
+        unset($row[4]);
+        echo "<li><b>Percentage: </b>" . $row[5] . "</li>";
+        unset($row[5]);
+        echo "<li><b>Grade: </b>" . $row[6] . "</li>";
+        unset($row[6]);
+        echo "<li data-role=\"list-divider\">Terms</li>";
+        if ($row) {
+            foreach ($row as $link) {
+                echo "<li>" . $link . "</li>";
+            }
+        } else {
+            echo "<li>There are no available terms with assignments. Has anything been graded in your class yet?</li>";
         }
         echo "</ul>
         </div>
     </div>";
+    }
+
+    function get_string_between($string, $start, $end){
+        $string = ' ' . $string;
+        $ini = strpos($string, $start);
+        if ($ini == 0) return '';
+        $ini += strlen($start);
+        $len = strpos($string, $end, $ini) - $ini;
+        return substr($string, $ini, $len);
     }
 
     function makeAuthRequest($username, $password)
@@ -99,6 +130,7 @@
         $new_new_result = explode("</table>", $new_result, 2)[1];
         $new_new_new_result = explode("</table>", $new_new_result, 2)[1];
         $new_new_new_new_result = explode("* To", $new_new_new_result)[0];
+        
 
         // load that table into a new DOM object, grab the tables, and convert them into arrays
         @$dom->loadHTML($new_new_new_new_result);
@@ -125,15 +157,19 @@
             foreach ($cols as $node) {
                 # code...
                 //print $node->nodeValue."\n";   
-                if ($row_headers == NULL)
+                if ($i == 7) {
+                    foreach ($node->getElementsByTagName('a') as $link) {
+                        $full_link = $link->getAttribute('href');
+                        $term = get_string_between($full_link, "term=", "&");
+                        array_push($row, "<a href=\"https://simsweb.esu3.org/" . $full_link . "\">Quarter " . $term . "</a>");
+                    }
+                } else {
                     $row[] = $node->nodeValue;
-                else
-                    $row[$row_headers[$i]] = $node->nodeValue;
+                }
                 $i++;
             }
             $table[] = $row;
         }
-
         unset($table[0]);
         return $table;
     }
@@ -151,6 +187,7 @@
 
     <div data-role="page" id="home" data-title="Gradesy">
         <header data-role="header">
+            <a href="index.html">↶</a>
             <h1>Gradesy</h1>
         </header>
         <?php

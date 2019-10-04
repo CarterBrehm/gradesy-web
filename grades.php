@@ -90,7 +90,7 @@
     {
         // make the request to the authentication server
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'http://simsweb.esu3.org/processlogin.cfm?sdist=plv');
+        curl_setopt($ch, CURLOPT_URL, 'https://simsweb.esu3.org/processlogin.cfm?sdist=plv');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, "userid=" . $username . "%40paplv.org&password=" . $password);
         curl_setopt($ch, CURLOPT_POST, 1);

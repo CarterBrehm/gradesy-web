@@ -18,7 +18,7 @@
 		function login() {
     		var id = document.getElementById('username').value;
 			var password = document.getElementById('password').value;
-			var url = "http://student.mccinfo.net/~crbrehm/gradesy/grades.php?id=" + encodeURIComponent(id) + "&pass=" + encodeURIComponent(password);
+			var url = "grades.php?id=" + encodeURIComponent(id) + "&pass=" + encodeURIComponent(password);
 			window.location.href = url;
 		}
 	</script>

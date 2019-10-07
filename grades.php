@@ -33,10 +33,15 @@
 
                 $table = $_SESSION['TABLE'];
                 foreach ($table as $row) {
-                    echo "<li><a href=\"#" . str_replace(' ', '', $row[0] . $row[1]) . "\">". $row[0] . "<span class=\"ui-li-count\">" . $row[6] . "</span>" . "</a></li>";
+                    echo "<li><a href=\"#" . str_replace(' ', '', $row[0] . $row[1]) . "\">". $row[0] . "<span class=\"ui-li-count\">" . mb_substr($row[5], 0, 5); 
+                    if(1 === preg_match('~[0-9]~', mb_substr($row[5], 0, 5))) { echo "%"; }
+                    if(preg_match("/[a-z]/i", $row[6])) {
+                    	echo " | " . $row[6];
+                    } 
+                    echo "</span>" . "</a></li>";
                 }
 
-            echo "</ul><p style=\"text-align: center;\"><b>Tip:</b> You can save this to your home screen as an app by pressing the share button below and hitting \"Add to Home Screen.\ This will save your login automatically.</p>
+            echo "</ul><p style=\"text-align: center;\"><b>Tip:</b> You can save this to your home screen as an app by pressing the share button below and hitting \"Add to Home Screen.\" This will save your login automatically.</p>
         </div>";
         } else {
             echo "<p style=\"text-align: center; margin: 10px;\">Your login info seems to be incorrect. Please go back and try again.</p>";
@@ -47,7 +52,7 @@
         echo "<div data-role=\"page\" data-title=\"" . $row[0] . "\" id=\"" . str_replace(' ', '', $row[0] . $row[1]) . "\">
         <header data-role=\"header\" data-add-back-btn=\"true\">
             <h1>" . $row[0] .  "</h1>
-            <a data-rel=\"back\">↶</a>
+            <a data-rel=\"back\">←</a>
         </header>
         <div data-role=\"content\">
             <ul data-role=\"listview\" data-inset=\"true\">";
@@ -188,7 +193,7 @@
 
     <div data-role="page" id="home" data-title="Gradesy">
         <header data-role="header">
-            <a data-rel="back">↶</a>
+            <a data-rel="back">←</a>
             <h1>Gradesy</h1>
         </header>
         <?php

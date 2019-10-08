@@ -5,16 +5,15 @@
     <title>Gradesy</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-    
 </head>
 
 <body>
     <link rel="stylesheet" href="vendor/waves/waves.min.css" />
 	<link rel="stylesheet" href="vendor/wow/animate.css" />
-	<link rel="stylesheet" href="css/nativedroid2.css" />
+    <link rel="stylesheet" href="css/nativedroid2.css" />
     <!--    
         Carter Brehm
         index.php
@@ -27,18 +26,28 @@
 
     function printClassOverview() {
         if (isset($_SESSION['TABLE'])) {
+            $emptyClasses = array();
             echo "<div data-role=\"content\">
             <ul data-role=\"listview\" data-inset=\"true\">";
             echo "<li data-role=\"list-divider\">Classes</li>";
 
                 $table = $_SESSION['TABLE'];
                 foreach ($table as $row) {
-                    echo "<li><a href=\"#" . str_replace(' ', '', $row[0] . $row[1]) . "\">". $row[0] . "<span class=\"ui-li-count\">" . mb_substr($row[5], 0, 5); 
-                    if(1 === preg_match('~[0-9]~', mb_substr($row[5], 0, 5))) { echo "%"; }
+                    if(1 === preg_match('~[0-9]~', mb_substr($row[5], 0, 5))) {
+                        echo "<li><a href=\"#" . str_replace(' ', '', $row[0] . $row[1]) . "\">". $row[0] . "<span class=\"ui-li-count\">" . mb_substr($row[5], 0, 5); 
+                        echo "%"; 
+                    } else {
+                        array_push($emptyClasses, $row);
+                    }
                     if(preg_match("/[a-z]/i", $row[6])) {
-                    	echo " | " . $row[6];
+                    	echo " | " . mb_substr($row[6], 0, 2);
                     } 
                     echo "</span>" . "</a></li>";
+                }
+
+                foreach ($emptyClasses as $row) {
+                    echo "<li class=\"ungraded\"><a href=\"#" . str_replace(' ', '', $row[0] . $row[1]) . "\">". $row[0]; 
+                    echo "<span class=\"ui-li-count\">N/A</span></a></li>";
                 }
 
             echo "</ul><p style=\"text-align: center;\"><b>Tip:</b> You can save this to your home screen as an app by pressing the share button below and hitting \"Add to Home Screen.\" This will save your login automatically.</p>
@@ -52,7 +61,7 @@
         echo "<div data-role=\"page\" data-title=\"" . $row[0] . "\" id=\"" . str_replace(' ', '', $row[0] . $row[1]) . "\">
         <header data-role=\"header\" data-add-back-btn=\"true\">
             <h1>" . $row[0] .  "</h1>
-            <a data-rel=\"back\">←</a>
+            <a data-rel=\"back\">↩️</a>
         </header>
         <div data-role=\"content\">
             <ul data-role=\"listview\" data-inset=\"true\">";
@@ -193,7 +202,7 @@
 
     <div data-role="page" id="home" data-title="Gradesy">
         <header data-role="header">
-            <a data-rel="back">←</a>
+            <a href="index.html">🏠</a>
             <h1>Gradesy</h1>
         </header>
         <?php

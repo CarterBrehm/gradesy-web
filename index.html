@@ -11,17 +11,17 @@
 </head>
 
 <body>
-	<link rel="stylesheet" href="vendor/waves/waves.min.css" />
-	<link rel="stylesheet" href="vendor/wow/animate.css" />
-	<link rel="stylesheet" href="css/nativedroid2.css" />
-	<script>
-		function login() {
-    		var id = document.getElementById('username').value;
-			var password = document.getElementById('password').value;
-			var url = "grades.php?id=" + encodeURIComponent(id) + "&pass=" + encodeURIComponent(password);
-			window.location.href = url;
-		}
-	</script>
+    <link rel="stylesheet" href="vendor/waves/waves.min.css" />
+    <link rel="stylesheet" href="vendor/wow/animate.css" />
+    <link rel="stylesheet" href="css/nativedroid2.css" />
+    <script>
+        function login() {
+            var id = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            var url = "grades.php?id=" + encodeURIComponent(id) + "&pass=" + encodeURIComponent(password);
+            window.location.href = url;
+        }
+    </script>
     <!--    
         Carter Brehm
         index.php
@@ -34,23 +34,23 @@
         <header data-role="header">
             <h1>Gradesy</h1>
         </header>
-    	<div data-role="content">
-    		<label for="username">Student ID:</label>
-    		<input type="text" name="username" id="username" value="">
-    		<label for="password">Password:</label>
-    		<input type="password" name="password" id="password" value="" autocomplete="off">
-    		<button class="ui-shadow ui-btn ui-corner-all" onClick="login();">Login</button>
-    	</div>
-        <footer style="text-align: center;" data-role="footer" data-position="fixed">Created by: <a href="mailto:crbrehm@mail.mccneb.edu">Carter Brehm</a></footer>
+        <div data-role="content">
+            <label for="username">Student ID:</label>
+            <input type="text" name="username" id="username" value="">
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password" value="" autocomplete="off">
+            <button class="ui-shadow ui-btn ui-corner-all" onClick="login();">Login</button>
+        </div>
+        <footer style="text-align: center;" data-role="footer" data-position="fixed">Created by: <a href="mailto:crbrehm@mail.mccneb.edu">Carter Brehm</a><a href="documentation.html">Documentation</a></footer>
     </div>
     <script>
-		var wage = document.getElementById("password");
-		wage.addEventListener("keydown", function (e) {
-    		if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
-        		login();
-    		}
-		});
-	</script>
+        var wage = document.getElementById("password");
+        wage.addEventListener("keydown", function(e) {
+            if (e.keyCode === 13) { //checks whether the pressed key is "Enter"
+                login();
+            }
+        });
+    </script>
 </body>
 
 </html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Gradesy</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+</head>
+
+<body>
+    <link rel="stylesheet" href="vendor/waves/waves.min.css" />
+    <link rel="stylesheet" href="vendor/wow/animate.css" />
+    <link rel="stylesheet" href="css/nativedroid2.css" />
+    <!--    
+        Carter Brehm
+        documentation.html
+        INFO2439.PLA
+        Thoendel
+        11/2/13
+    -->
+
+    <div data-role="page" id="home" data-title="Documentation">
+        <header data-role="header">
+            <h1>Documentation</h1>
+        </header>
+        <div data-role="content">
+            <h1>Overview</h1>
+            <h4>Login Page</h4>
+            <p>The bulk of the login page is done in stock HTML with jQuery Mobile applied on top with the nativedroid UI skin. There's a small script at the top of the page that takes the details entered by the user, URIencodes them, and passes them on
+                to the next page.</p>
+            <h4>Grades Page (Main Page)</h4>
+            <p>On page load, a PHP script runs (using the passed credentials) and emulates the users browser to retrieve the main schedule page on the Esu3 website. From there, it generates HTML (in the form of multiple jQuery Mobile pages) and then passes
+                it to jQuery Mobile, which then forms the main structure of the page. This page is also themed by nativedroid.</p>
+            <h4>Links</h4>
+            <ul data-role="listview" data-inset="true">
+                <li><a href="https://github.com/CarterBrehm/gradesy-web">Github</a></li>
+                <li><a href="https://app.moqups.com/yuuG020NSu/view">Mockup</a></li>
+                <li><a href="userStories.html">User Stories</a></li>
+                <li><a href="https://docs.google.com/document/d/e/2PACX-1vRlqCs9rEL3fP5qeK1WyhokC3MUwA0wIFrkFcDPpd9e6UdD3bkawRq0bQc0zwaTw6ONDYqTn3utgE76/pub">Scope Document</a></li>
+            </ul>
+        </div>
+        <footer style="text-align: center;" data-role="footer" data-position="fixed">Created by: <a href="mailto:crbrehm@mail.mccneb.edu">Carter Brehm</a><a href="documentation.html">Documentation</a></footer>
+    </div>
+</body>
+
+</html>

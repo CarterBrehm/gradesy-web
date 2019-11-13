@@ -23,6 +23,11 @@
     -->
 
     <?php
+    
+    function clean($string) {
+   		$string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
+		return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+	}
 
     function printClassOverview() {
         if (isset($_SESSION['TABLE'])) {
@@ -34,7 +39,7 @@
                 $table = $_SESSION['TABLE'];
                 foreach ($table as $row) {
                     if(1 === preg_match('~[0-9]~', mb_substr($row[5], 0, 5))) {
-                        echo "<li><a href=\"#" . str_replace(' ', '', $row[0] . $row[1]) . "\">". $row[0] . "<span class=\"ui-li-count\">" . mb_substr($row[5], 0, 5); 
+                        echo "<li><a href=\"#" . clean($row[0] . $row[1]) . "\">". $row[0] . "<span class=\"ui-li-count\">" . mb_substr($row[5], 0, 5); 
                         echo "%"; 
                     } else {
                         array_push($emptyClasses, $row);
@@ -46,7 +51,7 @@
                 }
 
                 foreach ($emptyClasses as $row) {
-                    echo "<li class=\"ungraded\"><a href=\"#" . str_replace(' ', '', $row[0] . $row[1]) . "\">". $row[0]; 
+                    echo "<li class=\"ungraded\"><a href=\"#" . clean($row[0] . $row[1]) . "\">". $row[0]; 
                     echo "<span class=\"ui-li-count\">N/A</span></a></li>";
                 }
 
@@ -58,7 +63,7 @@
     }
 
     function printClass($row) {
-        echo "<div data-role=\"page\" data-title=\"" . $row[0] . "\" id=\"" . str_replace(' ', '', $row[0] . $row[1]) . "\">
+        echo "<div data-role=\"page\" data-title=\"" . $row[0] . "\" id=\"" . clean($row[0] . $row[1]) . "\">
         <header data-role=\"header\" data-add-back-btn=\"true\">
             <h1>" . $row[0] .  "</h1>
             <a data-rel=\"back\">↩️</a>

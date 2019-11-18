@@ -12,7 +12,7 @@
 
 <body>
     <link rel="stylesheet" href="vendor/waves/waves.min.css" />
-	<link rel="stylesheet" href="vendor/wow/animate.css" />
+    <link rel="stylesheet" href="vendor/wow/animate.css" />
     <link rel="stylesheet" href="css/nativedroid2.css" />
     <!--    
         Carter Brehm
@@ -23,37 +23,43 @@
     -->
 
     <?php
-    
-    function clean($string) {
-   		$string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
-		return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
-	}
 
-    function printClassOverview() {
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+
+    function clean($string)
+    {
+        $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
+        return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+    }
+
+    function printClassOverview()
+    {
         if (isset($_SESSION['TABLE'])) {
             $emptyClasses = array();
             echo "<div data-role=\"content\">
             <ul data-role=\"listview\" data-inset=\"true\">";
             echo "<li data-role=\"list-divider\">Classes</li>";
 
-                $table = $_SESSION['TABLE'];
-                foreach ($table as $row) {
-                    if(1 === preg_match('~[0-9]~', mb_substr($row[5], 0, 5))) {
-                        echo "<li><a href=\"#" . clean($row[0] . $row[1]) . "\">". $row[0] . "<span class=\"ui-li-count\">" . mb_substr($row[5], 0, 5); 
-                        echo "%"; 
-                    } else {
-                        array_push($emptyClasses, $row);
-                    }
-                    if(preg_match("/[a-z]/i", $row[6])) {
-                    	echo " | " . mb_substr($row[6], 0, 2);
-                    } 
-                    echo "</span>" . "</a></li>";
+            $table = $_SESSION['TABLE'];
+            foreach ($table as $row) {
+                if (1 === preg_match('~[0-9]~', mb_substr($row[5], 0, 5))) {
+                    echo "<li><a href=\"#" . clean($row[0] . $row[1]) . "\">" . $row[0] . "<span class=\"ui-li-count\">" . mb_substr($row[5], 0, 5);
+                    echo "%";
+                } else {
+                    array_push($emptyClasses, $row);
                 }
+                if (preg_match("/[a-z]/i", $row[6])) {
+                    echo " | " . mb_substr($row[6], 0, 2);
+                }
+                echo "</span>" . "</a></li>";
+            }
 
-                foreach ($emptyClasses as $row) {
-                    echo "<li class=\"ungraded\"><a href=\"#" . clean($row[0] . $row[1]) . "\">". $row[0]; 
-                    echo "<span class=\"ui-li-count\">N/A</span></a></li>";
-                }
+            foreach ($emptyClasses as $row) {
+                echo "<li class=\"ungraded\"><a href=\"#" . clean($row[0] . $row[1]) . "\">" . $row[0];
+                echo "<span class=\"ui-li-count\">N/A</span></a></li>";
+            }
 
             echo "</ul><p style=\"text-align: center;\"><b>Tip:</b> You can save this to your home screen as an app by pressing the share button below and hitting \"Add to Home Screen.\" This will save your login automatically.</p>
         </div>";
@@ -62,7 +68,8 @@
         }
     }
 
-    function printClass($row) {
+    function printClass($row)
+    {
         echo "<div data-role=\"page\" data-title=\"" . $row[0] . "\" id=\"" . clean($row[0] . $row[1]) . "\">
         <header data-role=\"header\" data-add-back-btn=\"true\">
             <h1>" . $row[0] .  "</h1>
@@ -97,7 +104,8 @@
     </div>";
     }
 
-    function get_string_between($string, $start, $end){
+    function get_string_between($string, $start, $end)
+    {
         $string = ' ' . $string;
         $ini = strpos($string, $start);
         if ($ini == 0) return '';
@@ -122,6 +130,78 @@
         $auth_complete_link = $number_array[25];
         curl_close($ch);
         return $auth_complete_link;
+    }
+
+    function fetchAssignments($url)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $result = curl_exec($ch);
+        $result = explode("</table>", $result)[8];
+        print_r($result);
+        $dom = new DOMDocument();
+
+        //load the html  
+        @$dom->loadHTML($result);
+
+        //discard white space   
+        $dom->preserveWhiteSpace = false;
+
+        //the table by its tag name  
+        $tables = $dom->getElementsByTagName('table');
+
+
+        //get all rows from the table  
+        $rows = $tables->item(0)->getElementsByTagName('tr');
+        // get each column by tag name  
+        $cols = $rows->item(0)->getElementsByTagName('th');
+        $row_headers = NULL;
+        foreach ($cols as $node) {
+            //print $node->nodeValue."\n";   
+            $row_headers[] = $node->c14n();
+        }
+
+        $table = array();
+        //get all rows from the table  
+        $rows = $tables->item(0)->getElementsByTagName('tr');
+        foreach ($rows as $row) {
+            // get each column by tag name  
+            $cols = $row->getElementsByTagName('td');
+            $row = array();
+            $i = 0;
+            foreach ($cols as $node) {
+                # code...
+                //print $node->nodeValue."\n";   
+                if ($row_headers == NULL)
+                    //$row[] = $node->c14n();
+                    switch ($i) {
+                        case 0:
+                            $row[] = [get_string_between($node->c14n(), "href=\"", ">"), get_string_between($node->c14n(), "\"> ", "</a>"), mb_substr(get_string_between($node->c14n(), "</br>", "</td>"), 0, -1, "UTF-8")];
+                            break;
+                        case 1: 
+                            $row[] = mb_substr($node->nodeValue, 0, -1, "UTF-8");
+                            break;
+                        case 2:
+                            $row[] = strval(intval($node->nodeValue));
+                            break;
+                        case 3:
+                            $row[] = strval(intval($node->nodeValue));
+                            break;
+                        case 4:
+                            $row[] = strval(intval($node->nodeValue));
+                            break;
+                        default:
+                            $row[] = $node->nodeValue;
+                    }
+                else
+                    $row[$row_headers[$i]] = $node->c14n();
+                $i++;
+            }
+            $table[] = $row;
+        }
+        unset($table[0]);
+        var_dump($table);
     }
 
     function fetchGrades($url)
@@ -150,7 +230,7 @@
         $new_new_result = explode("</table>", $new_result, 2)[1];
         $new_new_new_result = explode("</table>", $new_new_result, 2)[1];
         $new_new_new_new_result = explode("* To", $new_new_new_result)[0];
-        
+
 
         // load that table into a new DOM object, grab the tables, and convert them into arrays
         @$dom->loadHTML($new_new_new_new_result);
@@ -211,14 +291,16 @@
             <h1>Gradesy</h1>
         </header>
         <?php
-            printClassOverview();
+        printClassOverview();
         ?>
         <footer style="text-align: center;" data-role="footer" data-position="fixed">Created by: <a href="mailto:crbrehm@mail.mccneb.edu">Carter Brehm</a></footer>
     </div>
-    <?php 
-        foreach ($_SESSION['TABLE'] as $row) {
-            printClass($row);
-        }
+    <?php
+    foreach ($_SESSION['TABLE'] as $row) {
+        printClass($row);
+    }
+
+    fetchAssignments("https://simsweb.esu3.org/childassignmentlist.cfm?cid=1004986&scid=355%20&crsid=MA41&sectid=Y12&term=2&CFID=10920600&CFTOKEN=92963315");
     ?>
 </body>
 

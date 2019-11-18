@@ -12,7 +12,7 @@
 
 <body>
     <link rel="stylesheet" href="vendor/waves/waves.min.css" />
-	<link rel="stylesheet" href="vendor/wow/animate.css" />
+    <link rel="stylesheet" href="vendor/wow/animate.css" />
     <link rel="stylesheet" href="css/nativedroid2.css" />
     <!--    
         Carter Brehm
@@ -23,37 +23,39 @@
     -->
 
     <?php
-    
-    function clean($string) {
-   		$string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
-		return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
-	}
 
-    function printClassOverview() {
+    function clean($string)
+    {
+        $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
+        return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+    }
+
+    function printClassOverview()
+    {
         if (isset($_SESSION['TABLE'])) {
             $emptyClasses = array();
             echo "<div data-role=\"content\">
             <ul data-role=\"listview\" data-inset=\"true\">";
             echo "<li data-role=\"list-divider\">Classes</li>";
 
-                $table = $_SESSION['TABLE'];
-                foreach ($table as $row) {
-                    if(1 === preg_match('~[0-9]~', mb_substr($row[5], 0, 5))) {
-                        echo "<li><a href=\"#" . clean($row[0] . $row[1]) . "\">". $row[0] . "<span class=\"ui-li-count\">" . mb_substr($row[5], 0, 5); 
-                        echo "%"; 
-                    } else {
-                        array_push($emptyClasses, $row);
-                    }
-                    if(preg_match("/[a-z]/i", $row[6])) {
-                    	echo " | " . mb_substr($row[6], 0, 2);
-                    } 
-                    echo "</span>" . "</a></li>";
+            $table = $_SESSION['TABLE'];
+            foreach ($table as $row) {
+                if (1 === preg_match('~[0-9]~', mb_substr($row[5], 0, 5))) {
+                    echo "<li><a href=\"#" . clean($row[0] . $row[1]) . "\">" . $row[0] . "<span class=\"ui-li-count\">" . mb_substr($row[5], 0, 5);
+                    echo "%";
+                } else {
+                    array_push($emptyClasses, $row);
                 }
+                if (preg_match("/[a-z]/i", $row[6])) {
+                    echo " | " . mb_substr($row[6], 0, 2);
+                }
+                echo "</span>" . "</a></li>";
+            }
 
-                foreach ($emptyClasses as $row) {
-                    echo "<li class=\"ungraded\"><a href=\"#" . clean($row[0] . $row[1]) . "\">". $row[0]; 
-                    echo "<span class=\"ui-li-count\">N/A</span></a></li>";
-                }
+            foreach ($emptyClasses as $row) {
+                echo "<li class=\"ungraded\"><a href=\"#" . clean($row[0] . $row[1]) . "\">" . $row[0];
+                echo "<span class=\"ui-li-count\">N/A</span></a></li>";
+            }
 
             echo "</ul><p style=\"text-align: center;\"><b>Tip:</b> You can save this to your home screen as an app by pressing the share button below and hitting \"Add to Home Screen.\" This will save your login automatically.</p>
         </div>";
@@ -62,7 +64,8 @@
         }
     }
 
-    function printClass($row) {
+    function printClass($row)
+    {
         echo "<div data-role=\"page\" data-title=\"" . $row[0] . "\" id=\"" . clean($row[0] . $row[1]) . "\">
         <header data-role=\"header\" data-add-back-btn=\"true\">
             <h1>" . $row[0] .  "</h1>
@@ -97,7 +100,8 @@
     </div>";
     }
 
-    function get_string_between($string, $start, $end){
+    function get_string_between($string, $start, $end)
+    {
         $string = ' ' . $string;
         $ini = strpos($string, $start);
         if ($ini == 0) return '';
@@ -150,7 +154,7 @@
         $new_new_result = explode("</table>", $new_result, 2)[1];
         $new_new_new_result = explode("</table>", $new_new_result, 2)[1];
         $new_new_new_new_result = explode("* To", $new_new_new_result)[0];
-        
+
 
         // load that table into a new DOM object, grab the tables, and convert them into arrays
         @$dom->loadHTML($new_new_new_new_result);
@@ -211,14 +215,20 @@
             <h1>Gradesy</h1>
         </header>
         <?php
-            printClassOverview();
+        printClassOverview();
         ?>
-        <footer style="text-align: center;" data-role="footer" data-position="fixed">Created by: <a href="mailto:crbrehm@mail.mccneb.edu">Carter Brehm</a></footer>
+
+<div style="overflow:hidden;width: 700px;position: relative;"><iframe width="700" height="440" src="https://maps.google.com/maps?width=700&amp;height=440&amp;hl=en&amp;q=10799%20NE-370%2C%20Papillion%2C%20NE%2068046+(PLSHS)&amp;ie=UTF8&amp;t=&amp;z=15&amp;iwloc=B&amp;output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><div style="position: absolute;width: 80%;bottom: 10px;left: 0;right: 0;margin-left: auto;margin-right: auto;color: #000;text-align: center;"><small style="line-height: 1.8;font-size: 2px;background: #fff;">Powered by <a href="https://embedgooglemaps.com/fr/">Embedgooglemaps.com/fr/</a> & <a href="http://lasvegasstatistics.embedgooglemaps.com">las vegas tourism</a></small></div><style>#gmap_canvas img{max-width:none!important;background:none!important}</style></div><br />
+        
+        <footer style="text-align: center;" data-role="footer" data-position="fixed">Created by: <a href="mailto:crbrehm@mail.mccneb.edu">Carter Brehm</a><a class="twitter-share-button"
+  href="https://twitter.com/intent/tweet?text=I%20just%20checked%20my%20grades%20with%20Gradesy!%20http://student.mccinfo.net/~crbrehm/gradesy"
+  data-size="large">
+Tweet about Gradesy!</a></footer>
     </div>
-    <?php 
-        foreach ($_SESSION['TABLE'] as $row) {
-            printClass($row);
-        }
+    <?php
+    foreach ($_SESSION['TABLE'] as $row) {
+        printClass($row);
+    }
     ?>
 </body>
 

@@ -40,12 +40,57 @@
             <label for="password">Password:</label>
             <input type="password" name="password" id="password" value="" autocomplete="off">
             <button class="ui-shadow ui-btn ui-corner-all" onClick="login();">Login</button>
+            <form style="width: 80%; margin-right: auto; margin-left: auto; margin-top: 10px;">
+            	<h3 style="text-align: center;">Final Grade Calculator<h3>
+            	<div id="weightDiv">
+            		<label for="weight">Final Weight (%):</label>
+            		<input style="text-align: center;" type="number" data-clear-btn="true" name="weight" pattern="[0-9]*" id="weight" value="10">
+            	</div>
+            	<div id="finalGradeDiv">
+    				<label for="grade">Final Exam Grade (%):</label>
+    				<input type="range" name="finalGrade" id="finalGrade" min="0" max="100" step=".1" value="50">
+    			</div>
+    			<div id="classGradeDiv">
+    				<label for="overall">Class Grade (%):</label>
+    				<input type="range" name="classGrade" id="classGrade" min="0" max="100" step=".1" value="50">
+    			</div>
+    			<p id="currentGrade">50</p>
+            	<script>
+            	
+            		var currentGrade, classGrade, finalGrade, finalWeight;
+            		
+            		function refreshValues() {
+            			currentGrade = parseFloat($("#currentGrade").text());
+            			classGrade = parseFloat($("#classGrade").val());
+            			finalGrade = parseFloat($("#finalGrade").val());
+            			finalWeight = parseFloat($("#weight").val()) / 100;
+            		}
+            	
+            		$("#finalGradeDiv").change(function() {
+            			refreshValues();
+            			var newClassGrade = (currentGrade * (1 - finalWeight)) + (finalWeight * finalGrade);
+            			$("#classGrade").val(newClassGrade).slider("refresh");
+            		});
+            		
+            		$("#weight").change(function() {
+            			refreshValues();
+            			var newFinalGrade = (classGrade - ((1 - finalWeight) * currentGrade)) / finalWeight;
+            			$("#finalGrade").val(newFinalGrade).slider("refresh");
+            		});
+            		
+            		$("#classGradeDiv").change(function() {
+            			refreshValues();
+            			var newFinalGrade = (classGrade - ((1 - finalWeight) * currentGrade)) / finalWeight;
+            			$("#finalGrade").val(newFinalGrade).slider("refresh");
+            		});
+            	</script>
+			</form>
         </div>
         <footer style="text-align: center;" data-role="footer" data-position="fixed">Created by: <a href="mailto:crbrehm@mail.mccneb.edu">Carter Brehm</a><a href="documentation.html">Documentation</a></footer>
     </div>
     <script>
-        var wage = document.getElementById("password");
-        wage.addEventListener("keydown", function(e) {
+        var passwordField = document.getElementById("password");
+        passwordField.addEventListener("keydown", function(e) {
             if (e.keyCode === 13) { //checks whether the pressed key is "Enter"
                 login();
             }

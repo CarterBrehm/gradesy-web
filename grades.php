@@ -83,7 +83,7 @@
         unset($row[3]);
         echo "<li><b>Teacher: </b>" . $row[4] . "</li>";
         unset($row[4]);
-        echo "<li><b>Percentage: </b>" . $row[5] . "</li>";
+        echo "<li><b>Percentage: </b><span id=\"currentGrade\">" . $row[5] . "</span></li>";
         unset($row[5]);
         echo "<li><b>Grade: </b>" . $row[6] . "</li>";
         unset($row[6]);
@@ -95,7 +95,50 @@
         } else {
             echo "<li>There are no available terms with assignments. Has anything been graded in your class yet?</li>";
         }
-        echo "</ul>
+        echo "</ul><form style=\"width: 80%; margin-right: auto; margin-left: auto; margin-top: 10px;\">
+            	<h3 style=\"text-align: center;\">Final Grade Calculator<h3>
+            	<div id=\"weightDiv\">
+            		<label for=\"weight\">Final Weight (%):</label>
+            		<input style=\"text-align: center;\" type=\"number\" data-clear-btn=\"true\" name=\"weight\" pattern=\"[0-9]*\" id=\"weight\" value=\"10\">
+            	</div>
+            	<div id=\"finalGradeDiv\">
+    				<label for=\"grade\">Final Exam Grade (%):</label>
+    				<input type=\"range\" name=\"finalGrade\" id=\"finalGrade\" min=\"0\" max=\"100\" step=\".1\" value=\"50\">
+    			</div>
+    			<div id=\"classGradeDiv\">
+    				<label for=\"overall\">Class Grade (%):</label>
+    				<input type=\"range\" name=\"classGrade\" id=\"classGrade\" min=\"0\" max=\"100\" step=\".1\" value=\"50\">
+    			</div>
+    			<p id=\"currentGrade\">50</p>
+            	<script>
+            	
+            		var currentGrade, classGrade, finalGrade, finalWeight;
+            		
+            		function refreshValues() {
+            			currentGrade = parseFloat($(\"#currentGrade\").text());
+            			classGrade = parseFloat($(\"#classGrade\").val());
+            			finalGrade = parseFloat($(\"#finalGrade\").val());
+            			finalWeight = parseFloat($(\"#weight\").val()) / 100;
+            		}
+            	
+            		$(\"#finalGradeDiv\").change(function() {
+            			refreshValues();
+            			var newClassGrade = (currentGrade * (1 - finalWeight)) + (finalWeight * finalGrade);
+            			$(\"#classGrade\").val(newClassGrade).slider(\"refresh\");
+            		});
+            		
+            		$(\"#weight\").change(function() {
+            			refreshValues();
+            			var newFinalGrade = (classGrade - ((1 - finalWeight) * currentGrade)) / finalWeight;
+            			$(\"#finalGrade\").val(newFinalGrade).slider(\"refresh\");
+            		});
+            		
+            		$(\"#classGradeDiv\").change(function() {
+            			refreshValues();
+            			var newFinalGrade = (classGrade - ((1 - finalWeight) * currentGrade)) / finalWeight;
+            			$(\"#finalGrade\").val(newFinalGrade).slider(\"refresh\");
+            		});
+            	</script>
         </div>
     </div>";
     }
@@ -217,8 +260,6 @@
         <?php
         printClassOverview();
         ?>
-
-<div style="overflow:hidden;width: 700px;position: relative;"><iframe width="700" height="440" src="https://maps.google.com/maps?width=700&amp;height=440&amp;hl=en&amp;q=10799%20NE-370%2C%20Papillion%2C%20NE%2068046+(PLSHS)&amp;ie=UTF8&amp;t=&amp;z=15&amp;iwloc=B&amp;output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><div style="position: absolute;width: 80%;bottom: 10px;left: 0;right: 0;margin-left: auto;margin-right: auto;color: #000;text-align: center;"><small style="line-height: 1.8;font-size: 2px;background: #fff;">Powered by <a href="https://embedgooglemaps.com/fr/">Embedgooglemaps.com/fr/</a> & <a href="http://lasvegasstatistics.embedgooglemaps.com">las vegas tourism</a></small></div><style>#gmap_canvas img{max-width:none!important;background:none!important}</style></div><br />
         
         <footer style="text-align: center;" data-role="footer" data-position="fixed">Created by: <a href="mailto:crbrehm@mail.mccneb.edu">Carter Brehm</a><a class="twitter-share-button"
   href="https://twitter.com/intent/tweet?text=I%20just%20checked%20my%20grades%20with%20Gradesy!%20http://student.mccinfo.net/~crbrehm/gradesy"
